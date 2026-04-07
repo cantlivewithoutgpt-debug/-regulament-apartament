@@ -212,6 +212,8 @@ var SECTIONS=[
 var state={},fieldValues={},customRules=[],customId=0;
 var checkSvg='<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
 
+function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+
 function init(){
 var container=document.getElementById('sections');
 SECTIONS.forEach(function(sec,si){
@@ -265,7 +267,7 @@ var id='c'+(++customId);customRules.push(id);
 var div=document.createElement('div');div.className='cr';div.id='crule-'+id;
 div.innerHTML=
 '<div class="cr-chk">'+checkSvg+'</div>'+
-'<span class="cr-text" contenteditable="true" id="ctext-'+id+'">'+text+'</span>'+
+'<span class="cr-text" contenteditable="true" id="ctext-'+id+'">'+esc(text)+'</span>'+
 '<button class="cr-del" onclick="removeCustomRule(\''+id+'\')" title="Sterge">&times;</button>';
 document.getElementById('customRules').appendChild(div);
 input.value='';input.focus();updateCount();
@@ -297,12 +299,15 @@ if(selectedRules.length===0){document.getElementById('status').textContent='Sele
 btn.disabled=true;btn.textContent='Se trimite...';
 document.getElementById('status').textContent='Se salveaza...';
 try{
-await fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:'',rules:selectedRules.join('\n'),phone:fieldValues.phone||'',maxpers:fieldValues.maxpers||''})});
+var controller=new AbortController();
+var timeout=setTimeout(function(){controller.abort()},15000);
+await fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({rules:selectedRules.join('\n'),phone:fieldValues.phone||'',maxpers:fieldValues.maxpers||''}),signal:controller.signal});
+clearTimeout(timeout);
 document.getElementById('formWrap').classList.add('hidden');
 document.getElementById('successMsg').classList.add('show');
 document.getElementById('status').textContent='Salvat!';
 }catch(err){
-document.getElementById('status').textContent='Eroare — incearca din nou';
+document.getElementById('status').textContent=err.name==='AbortError'?'Timeout — incearca din nou':'Eroare de retea — incearca din nou';
 btn.disabled=false;btn.textContent='Trimite selectia';
 }}
 
