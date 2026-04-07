@@ -10,14 +10,14 @@
 :root{
 --bg:#0e0e0e;--card:#1a1a1a;--card2:#222;--border:#2a2a2a;
 --gold:#c9a96e;--gold2:#e8d5a8;--gold-dim:#8a7a50;
---text:#f0ede6;--text2:#a09a8e;--text3:#5a5650;
+--text:#f0ede6;--text2:#a09a8e;--text3:#5a5650;--text-rule:#c8c2b8;
 --green:#3a9e5c;--red:#d44040;--blue:#5a8fd4;--amber:#d4922a;--purple:#8a7abf;--pink:#c45a7a;
 --radius:12px;--checked-bg:rgba(58,158,92,0.06);--bar-bg:rgba(14,14,14,0.92);
 }
 html.light{
 --bg:#f5f3ee;--card:#ffffff;--card2:#faf8f4;--border:#e0dbd2;
 --gold:#a6854a;--gold2:#7a6235;--gold-dim:#c9a96e;
---text:#1c1c1a;--text2:#5a5650;--text3:#a09a8e;
+--text:#1c1c1a;--text2:#5a5650;--text3:#a09a8e;--text-rule:#4a4640;
 --checked-bg:rgba(58,158,92,0.08);--bar-bg:rgba(245,243,238,0.92);
 }
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:0 0 3rem}
@@ -46,7 +46,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .rule.checked .cb{background:var(--green);border-color:var(--green)}
 .cb svg{width:12px;height:12px;opacity:0;transition:opacity .1s}
 .rule.checked .cb svg{opacity:1}
-.rule-text{font-size:13px;line-height:1.5;color:var(--text2);flex:1}
+.rule-text{font-size:13px;line-height:1.5;color:var(--text-rule);flex:1}
 .rule.checked .rule-text{color:var(--text)}
 .rule-edit{outline:none;border-radius:4px;padding:1px 3px;margin:-1px -3px;transition:background .15s}
 .rule-edit:focus{background:var(--card2);box-shadow:0 0 0 1px var(--gold)}
@@ -214,29 +214,77 @@ var checkSvg='<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3
 
 function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
 
+function saveState(){
+try{
+var editedTexts={};
+SECTIONS.forEach(function(sec){sec.rules.forEach(function(r){
+var el=document.getElementById('text-'+r.id);
+if(el&&el.textContent.trim()!==r.text)editedTexts[r.id]=el.textContent.trim();
+});});
+var customData=customRules.map(function(id){
+var el=document.getElementById('ctext-'+id);
+return el?el.textContent.trim():'';
+}).filter(Boolean);
+localStorage.setItem('regState',JSON.stringify({state:state,fieldValues:fieldValues,editedTexts:editedTexts,customData:customData}));
+}catch(e){}
+}
+function loadState(){
+try{
+var saved=JSON.parse(localStorage.getItem('regState'));
+if(!saved)return false;
+state=saved.state||{};
+fieldValues=saved.fieldValues||{};
+SECTIONS.forEach(function(sec){sec.rules.forEach(function(r){
+if(!(r.id in state))state[r.id]=!!r.on;
+});});
+return saved;
+}catch(e){return false;}
+}
+
 function init(){
+var saved=loadState();
 var container=document.getElementById('sections');
 SECTIONS.forEach(function(sec,si){
-sec.rules.forEach(function(r){state[r.id]=!!r.on;if(r.field)fieldValues[r.field]='';});
-var cc=sec.rules.filter(function(r){return!!r.on}).length;
+if(!saved)sec.rules.forEach(function(r){state[r.id]=!!r.on;if(r.field)fieldValues[r.field]='';});
+else sec.rules.forEach(function(r){if(r.field&&!(r.field in fieldValues))fieldValues[r.field]='';});
+var cc=sec.rules.filter(function(r){return state[r.id]}).length;
 var div=document.createElement('div');div.className='section';
 div.innerHTML=
-'<div class="sec-head'+(si<3?' open':'')+'" onclick="toggleSection(this)" data-sec="'+sec.id+'">'+
+'<div class="sec-head'+(si===0?' open':'')+'" onclick="toggleSection(this)" data-sec="'+sec.id+'">'+
 '<span class="dot" style="background:'+sec.color+'"></span>'+
 '<span class="title">'+sec.title+'</span>'+
 '<span class="badge" id="badge-'+sec.id+'">'+cc+'/'+sec.rules.length+'</span>'+
 '<span class="arrow">&#9660;</span></div>'+
-'<div class="sec-body'+(si<3?' open':'')+'" id="body-'+sec.id+'">'+
+'<div class="sec-body'+(si===0?' open':'')+'" id="body-'+sec.id+'">'+
 sec.rules.map(function(r){
-return'<div class="rule'+(r.on?' checked':'')+'" id="rule-'+r.id+'" onclick="toggleRule(\''+r.id+'\',\''+sec.id+'\',event)">'+
+return'<div class="rule'+(state[r.id]?' checked':'')+'" id="rule-'+r.id+'" onclick="toggleRule(\''+r.id+'\',\''+sec.id+'\',event)">'+
 '<div class="cb">'+checkSvg+'</div>'+
 '<div class="rule-text">'+
-'<span class="rule-edit" contenteditable="true" id="text-'+r.id+'" onclick="event.stopPropagation()">'+r.text+'</span>'+
-(r.field?'<div class="field"><input type="text" id="field-'+r.field+'" placeholder="'+r.placeholder+'" onclick="event.stopPropagation()" oninput="fieldValues[\''+r.field+'\']=this.value"></div>':'')+
+'<span class="rule-edit" contenteditable="true" id="text-'+r.id+'" onclick="event.stopPropagation()" oninput="saveState()">'+r.text+'</span>'+
+(r.field?'<div class="field"><input type="text" id="field-'+r.field+'" placeholder="'+r.placeholder+'" onclick="event.stopPropagation()" oninput="fieldValues[\''+r.field+'\']=this.value;saveState()"></div>':'')+
 '</div></div>';
 }).join('')+'</div>';
 container.appendChild(div);
 });
+if(saved){
+if(saved.editedTexts){Object.keys(saved.editedTexts).forEach(function(id){
+var el=document.getElementById('text-'+id);
+if(el)el.textContent=saved.editedTexts[id];
+});}
+Object.keys(fieldValues).forEach(function(f){
+var el=document.getElementById('field-'+f);
+if(el)el.value=fieldValues[f]||'';
+});
+if(saved.customData){saved.customData.forEach(function(text){
+var id='c'+(++customId);customRules.push(id);
+var div=document.createElement('div');div.className='cr';div.id='crule-'+id;
+div.innerHTML=
+'<div class="cr-chk">'+checkSvg+'</div>'+
+'<span class="cr-text" contenteditable="true" id="ctext-'+id+'" oninput="saveState()">'+esc(text)+'</span>'+
+'<button class="cr-del" onclick="removeCustomRule(\''+id+'\')" title="Sterge">&times;</button>';
+document.getElementById('customRules').appendChild(div);
+});}
+}
 updateCount();
 }
 
@@ -246,7 +294,7 @@ function toggleRule(id,secId,e){
 if(e.target.tagName==='INPUT'||e.target.getAttribute('contenteditable'))return;
 state[id]=!state[id];
 document.getElementById('rule-'+id).classList.toggle('checked',state[id]);
-updateBadge(secId);updateCount();
+updateBadge(secId);updateCount();saveState();
 }
 
 function updateBadge(secId){
@@ -270,12 +318,12 @@ div.innerHTML=
 '<span class="cr-text" contenteditable="true" id="ctext-'+id+'">'+esc(text)+'</span>'+
 '<button class="cr-del" onclick="removeCustomRule(\''+id+'\')" title="Sterge">&times;</button>';
 document.getElementById('customRules').appendChild(div);
-input.value='';input.focus();updateCount();
+input.value='';input.focus();updateCount();saveState();
 }
 
 function removeCustomRule(id){
 customRules=customRules.filter(function(c){return c!==id});
-var el=document.getElementById('crule-'+id);if(el)el.remove();updateCount();
+var el=document.getElementById('crule-'+id);if(el)el.remove();updateCount();saveState();
 }
 
 document.getElementById('newRuleInput').addEventListener('keydown',function(e){
@@ -323,6 +371,7 @@ state[r.id]=!!r.on;
 document.getElementById('rule-'+r.id).classList.toggle('checked',state[r.id]);
 if(r.field){fieldValues[r.field]='';document.getElementById('field-'+r.field).value='';}
 });updateBadge(sec.id);});updateCount();
+try{localStorage.removeItem('regState')}catch(e){}
 }
 
 function toggleTheme(){
