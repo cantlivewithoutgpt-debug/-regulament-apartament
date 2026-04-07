@@ -92,9 +92,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 <body>
 
 <div class="hero">
-<button class="theme-toggle" onclick="toggleTheme()" id="themeBtn" title="Schimba tema">&#9728;&#65039;</button>
+<button class="theme-toggle" onclick="toggleTheme()" id="themeBtn" title="Schimbă tema">&#9728;&#65039;</button>
 <h1>Regulament Apartament</h1>
-<p>Selecteaza regulile potrivite, editeaza textul daca vrei, si adauga reguli noi</p>
+<p>Selectează regulile potrivite, editează textul dacă vrei, și adaugă reguli noi</p>
 </div>
 
 <div class="sticky-bar">
@@ -109,24 +109,24 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 <div id="sections"></div>
 
 <div class="add-box">
-<h3>+ Adauga o regula noua</h3>
+<h3>+ Adaugă o regulă nouă</h3>
 <div class="add-row">
-<input type="text" id="newRuleInput" placeholder="Scrie regula aici si apasa Enter sau Adauga...">
-<button onclick="addCustomRule()">Adauga</button>
+<input type="text" id="newRuleInput" placeholder="Scrie regula aici și apasă Enter sau Adaugă...">
+<button onclick="addCustomRule()">Adaugă</button>
 </div>
 <div id="customRules"></div>
 </div>
 
-<button class="btn-submit" id="submitBtn" onclick="submitForm()">Trimite selectia</button>
+<button class="btn-submit" id="submitBtn" onclick="submitForm()">Trimite selecția</button>
 </div>
 
 <div class="success" id="successMsg">
 <div class="check-circle">
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
 </div>
-<h2>Multumim!</h2>
-<p>Selectia ta a fost salvata. Proprietarul va vedea raspunsul tau.</p>
-<button class="btn-another" onclick="resetForm()">+ Completeaza din nou</button>
+<h2>Mulțumim!</h2>
+<p>Selecția ta a fost salvată. Proprietarul va vedea răspunsul tău.</p>
+<button class="btn-another" onclick="resetForm()">+ Completează din nou</button>
 </div>
 </div>
 
@@ -134,79 +134,79 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 var ENDPOINT="https://script.google.com/macros/s/AKfycbxXqDwvTqGc1J-0tVpjkl8r2CdJrtzBqPQgEWhL1dcOxM3yzf_1mehMdjv86ycqBw/exec";
 var SECTIONS=[
 {id:"fumat",title:"Fumatul",color:"#d44040",rules:[
-{id:"r1",text:"Fumatul in interior este strict interzis (inclusiv vape, iqos, tigari electronice)",on:true},
+{id:"r1",text:"Fumatul în interior este strict interzis (inclusiv vape, IQOS, țigări electronice)",on:true},
 {id:"r2",text:"Fumatul este permis doar pe balcon",on:true},
-{id:"r3",text:"Mucurile de tigara se arunca in scrumiera, nu pe jos sau peste balcon"}]},
-{id:"liniste",title:"Zgomot si liniste",color:"#8a7abf",rules:[
-{id:"r4",text:"Liniste dupa ora 22:00",on:true},
-{id:"r5",text:"Petrecerile si evenimentele nu sunt permise",on:true},
-{id:"r6",text:"Evitati trantitul usilor, muzica tare, strigatul"},
-{id:"r7",text:"Fiti respectuosi cu vecinii — este o zona rezidentiala"}]},
-{id:"ac",title:"Aer conditionat si energie",color:"#5a8fd4",rules:[
-{id:"r8",text:"Nu lasati aerul conditionat pornit cu geamurile sau usile deschise",on:true},
-{id:"r9",text:"Stingeti luminile, aerul conditionat si TV-ul cand plecati din apartament"}]},
+{id:"r3",text:"Mucurile de țigară se aruncă în scrumieră, nu pe jos sau peste balcon"}]},
+{id:"liniste",title:"Zgomot și liniște",color:"#8a7abf",rules:[
+{id:"r4",text:"Liniște după ora 22:00",on:true},
+{id:"r5",text:"Petrecerile și evenimentele nu sunt permise",on:true},
+{id:"r6",text:"Evitați trântitul ușilor, muzica tare, strigătul"},
+{id:"r7",text:"Fiți respectuoși cu vecinii — este o zonă rezidențială"}]},
+{id:"ac",title:"Aer condiționat și energie",color:"#5a8fd4",rules:[
+{id:"r8",text:"Nu lăsați aerul condiționat pornit cu geamurile sau ușile deschise",on:true},
+{id:"r9",text:"Stingeți luminile, aerul condiționat și TV-ul când plecați din apartament"}]},
 {id:"animale",title:"Animale",color:"#c45a7a",rules:[
 {id:"r10",text:"Animalele de companie nu sunt permise",on:true}]},
-{id:"vizitatori",title:"Vizitatori si ocupare",color:"#d4922a",rules:[
-{id:"r11",text:"Doar persoanele din rezervare au acces in apartament"},
-{id:"r12",text:"Nu sunt permisi vizitatori neinregistrati peste noapte"},
+{id:"vizitatori",title:"Vizitatori și ocupare",color:"#d4922a",rules:[
+{id:"r11",text:"Doar persoanele din rezervare au acces în apartament"},
+{id:"r12",text:"Nu sunt permiși vizitatori neînregistrați peste noapte"},
 {id:"r13",text:"Nr. maxim de persoane",field:"maxpers",placeholder:"ex: 4 persoane"}]},
-{id:"bucatarie",title:"Bucatarie si gratar",color:"#d4922a",rules:[
-{id:"r14",text:"Echipamentele din bucatarie sunt la dispozitia voastra"},
-{id:"r15",text:"Gratar disponibil in exterior — curatati-l dupa utilizare"},
-{id:"r16",text:"Nu lasati aragazul/cuptorul pornit nesupravegheat"}]},
-{id:"baie",title:"Baia si instalatii sanitare",color:"#3a9e5c",rules:[
-{id:"r17",text:"Nu aruncati servetele umede, tampoane sau alte obiecte in toaleta"},
-{id:"r18",text:"Semnalati orice scurgere sau problema la instalatii imediat"}]},
-{id:"spalat",title:"Masina de spalat",color:"#888780",rules:[
-{id:"r19",text:"Masina de spalat este la dispozitie"},
-{id:"r20",text:"Nu supraincarcati masina si nu folositi cantitati excesive de detergent"},
-{id:"r21",text:"Nu spalati haine cu vopsea sau substante care pot strica masina"}]},
-{id:"chei",title:"Chei si acces",color:"#d44040",rules:[
-{id:"r22",text:"Nu faceti copii dupa chei / nu dati codul de acces altor persoane"},
-{id:"r23",text:"La plecare, returnati cheile / asigurati-va ca usa este incuiata"}]},
-{id:"siguranta",title:"Siguranta",color:"#d4922a",rules:[
-{id:"r24",text:"Detectoarele de fum si gaz sunt instalate — nu le dezactivati",on:true},
-{id:"r25",text:"Incuiati usa de la intrare cand plecati si noaptea"},
-{id:"r26",text:"Nu lasati focul deschis nesupravegheat (aragaz, lumanari, gratar)"},
-{id:"r27",text:"In caz de urgenta, sunati la 112"}]},
+{id:"bucatarie",title:"Bucătărie și grătar",color:"#d4922a",rules:[
+{id:"r14",text:"Echipamentele din bucătărie sunt la dispoziția voastră"},
+{id:"r15",text:"Grătar disponibil în exterior — curățați-l după utilizare"},
+{id:"r16",text:"Nu lăsați aragazul/cuptorul pornit nesupravegheat"}]},
+{id:"baie",title:"Baia și instalații sanitare",color:"#3a9e5c",rules:[
+{id:"r17",text:"Nu aruncați șervețele umede, tampoane sau alte obiecte în toaletă"},
+{id:"r18",text:"Semnalați orice scurgere sau problemă la instalații imediat"}]},
+{id:"spalat",title:"Mașina de spălat",color:"#888780",rules:[
+{id:"r19",text:"Mașina de spălat este la dispoziție"},
+{id:"r20",text:"Nu supraîncărcați mașina și nu folosiți cantități excesive de detergent"},
+{id:"r21",text:"Nu spălați haine cu vopsea sau substanțe care pot strica mașina"}]},
+{id:"chei",title:"Chei și acces",color:"#d44040",rules:[
+{id:"r22",text:"Nu faceți copii după chei / nu dați codul de acces altor persoane"},
+{id:"r23",text:"La plecare, returnați cheile / asigurați-vă că ușa este încuiată"}]},
+{id:"siguranta",title:"Siguranța",color:"#d4922a",rules:[
+{id:"r24",text:"Detectoarele de fum și gaz sunt instalate — nu le dezactivați",on:true},
+{id:"r25",text:"Încuiați ușa de la intrare când plecați și noaptea"},
+{id:"r26",text:"Nu lăsați focul deschis nesupravegheat (aragaz, lumânări, grătar)"},
+{id:"r27",text:"În caz de urgență, sunați la 112"}]},
 {id:"copii",title:"Copii",color:"#8a7abf",rules:[
-{id:"r28",text:"Copiii trebuie supravegheati permanent de un adult"},
-{id:"r29",text:"Proprietarul nu isi asuma responsabilitatea pentru siguranta copiilor"}]},
+{id:"r28",text:"Copiii trebuie supravegheați permanent de un adult"},
+{id:"r29",text:"Proprietarul nu își asumă responsabilitatea pentru siguranța copiilor"}]},
 {id:"pagube",title:"Pagube",color:"#d44040",rules:[
-{id:"r30",text:"Orice stricaciune se raporteaza imediat proprietarului",on:true},
-{id:"r31",text:"Nu incercati sa reparati singuri — contactati proprietarul"},
-{id:"r32",text:"Costul reparatiilor/inlocuirilor va fi suportat de oaspete"}]},
+{id:"r30",text:"Orice stricăciune se raportează imediat proprietarului",on:true},
+{id:"r31",text:"Nu încercați să reparați singuri — contactați proprietarul"},
+{id:"r32",text:"Costul reparațiilor/înlocuirilor va fi suportat de oaspete"}]},
 {id:"parcare",title:"Parcarea",color:"#5a8fd4",rules:[
 {id:"r33",text:"Loc de parcare inclus"},
 {id:"r34",text:"Doar un vehicul per rezervare"},
-{id:"r35",text:"Nu blocati accesul altor locatari"}]},
-{id:"spatii",title:"Spatii comune",color:"#888780",rules:[
-{id:"r36",text:"Respectati regulile blocului/cladirii"},
-{id:"r37",text:"Nu lasati obiecte personale in spatiile comune (scara, hol)"}]},
+{id:"r35",text:"Nu blocați accesul altor locatari"}]},
+{id:"spatii",title:"Spații comune",color:"#888780",rules:[
+{id:"r36",text:"Respectați regulile blocului/clădirii"},
+{id:"r37",text:"Nu lăsați obiecte personale în spațiile comune (scară, hol)"}]},
 {id:"consumabile",title:"Consumabile",color:"#3a9e5c",rules:[
-{id:"r38",text:"Consumabilele de baza sunt incluse (sapun, hartie igienica, etc.)"},
-{id:"r39",text:"Daca se termina ceva, anuntati proprietarul"}]},
+{id:"r38",text:"Consumabilele de bază sunt incluse (săpun, hârtie igienică, etc.)"},
+{id:"r39",text:"Dacă se termină ceva, anunțați proprietarul"}]},
 {id:"wifi",title:"Internet / Wi-Fi",color:"#5a8fd4",rules:[
-{id:"r40",text:"Retea si parola afisate in apartament"},
-{id:"r41",text:"Nu descarcati continut ilegal prin reteaua noastra"}]},
-{id:"zone",title:"Zone restrictionate",color:"#888780",rules:[
-{id:"r42",text:"Anumite spatii de depozitare sunt ale proprietarului — nu le accesati"},
-{id:"r43",text:"Nu deschideti tabloul electric decat in caz de pana de curent"}]},
-{id:"mobilier",title:"Mobilier si decor",color:"#d4922a",rules:[
-{id:"r44",text:"Nu mutati mobila din pozitia initiala"},
-{id:"r45",text:"Nu puneti cuie, scotch sau adezivi pe pereti"}]},
+{id:"r40",text:"Rețea și parolă afișate în apartament"},
+{id:"r41",text:"Nu descărcați conținut ilegal prin rețeaua noastră"}]},
+{id:"zone",title:"Zone restricționate",color:"#888780",rules:[
+{id:"r42",text:"Anumite spații de depozitare sunt ale proprietarului — nu le accesați"},
+{id:"r43",text:"Nu deschideți tabloul electric decât în caz de pană de curent"}]},
+{id:"mobilier",title:"Mobilier și decor",color:"#d4922a",rules:[
+{id:"r44",text:"Nu mutați mobila din poziția inițială"},
+{id:"r45",text:"Nu puneți cuie, scotch sau adezivi pe pereți"}]},
 {id:"checkout",title:"Checkout",color:"#8a7abf",rules:[
-{id:"r46",text:"Inchideti toate geamurile si usile"},
-{id:"r47",text:"Opriti toate luminile si aparatele electrice"},
-{id:"r48",text:"Stingeti aerul conditionat"},
-{id:"r49",text:"Lasati cheile in locul stabilit"}]},
-{id:"contact",title:"Contact si urgente",color:"#3a9e5c",rules:[
-{id:"r50",text:"Proprietarii sunt in apropiere si disponibili pentru orice problema",on:true},
+{id:"r46",text:"Închideți toate geamurile și ușile"},
+{id:"r47",text:"Opriți toate luminile și aparatele electrice"},
+{id:"r48",text:"Stingeți aerul condiționat"},
+{id:"r49",text:"Lăsați cheile în locul stabilit"}]},
+{id:"contact",title:"Contact și urgențe",color:"#3a9e5c",rules:[
+{id:"r50",text:"Proprietarii sunt în apropiere și disponibili pentru orice problemă",on:true},
 {id:"r51",text:"Nr. telefon proprietar",field:"phone",placeholder:"07xx xxx xxx"}]},
-{id:"bunsmt",title:"Bun simt general",color:"#888780",rules:[
-{id:"r52",text:"Tratati apartamentul cu grija — spatiu primitor, amenajat cu gust, echipat cu tot ce aveti nevoie"},
-{id:"r53",text:"Orice nelamurire — contactati proprietarul, suntem aproape si va ajutam cu placere"}]}
+{id:"bunsmt",title:"Bun simț general",color:"#888780",rules:[
+{id:"r52",text:"Tratați apartamentul cu grijă — spațiu primitor, amenajat cu gust, echipat cu tot ce aveți nevoie"},
+{id:"r53",text:"Orice nelămurire — contactați proprietarul, suntem aproape și vă ajutăm cu plăcere"}]}
 ];
 
 var state={},fieldValues={},customRules=[],customId=0;
@@ -281,7 +281,7 @@ var div=document.createElement('div');div.className='cr';div.id='crule-'+id;
 div.innerHTML=
 '<div class="cr-chk">'+checkSvg+'</div>'+
 '<span class="cr-text" contenteditable="true" id="ctext-'+id+'" oninput="saveState()">'+esc(text)+'</span>'+
-'<button class="cr-del" onclick="removeCustomRule(\''+id+'\')" title="Sterge">&times;</button>';
+'<button class="cr-del" onclick="removeCustomRule(\''+id+'\')" title="Șterge">&times;</button>';
 document.getElementById('customRules').appendChild(div);
 });}
 }
@@ -305,7 +305,7 @@ document.getElementById('badge-'+secId).textContent=c+'/'+sec.rules.length;
 
 function updateCount(){
 var n=Object.values(state).filter(Boolean).length+customRules.length;
-document.getElementById('count').textContent=n+' regul'+(n===1?'a selectata':'i selectate');
+document.getElementById('count').textContent=n+' regul'+(n===1?'ă selectată':'i selectate');
 }
 
 function addCustomRule(){
@@ -316,7 +316,7 @@ var div=document.createElement('div');div.className='cr';div.id='crule-'+id;
 div.innerHTML=
 '<div class="cr-chk">'+checkSvg+'</div>'+
 '<span class="cr-text" contenteditable="true" id="ctext-'+id+'">'+esc(text)+'</span>'+
-'<button class="cr-del" onclick="removeCustomRule(\''+id+'\')" title="Sterge">&times;</button>';
+'<button class="cr-del" onclick="removeCustomRule(\''+id+'\')" title="Șterge">&times;</button>';
 document.getElementById('customRules').appendChild(div);
 input.value='';input.focus();updateCount();saveState();
 }
@@ -343,9 +343,9 @@ customRules.forEach(function(id){
 var el=document.getElementById('ctext-'+id);
 if(el)selectedRules.push('[NOU] '+el.textContent.trim());
 });
-if(selectedRules.length===0){document.getElementById('status').textContent='Selecteaza cel putin o regula';return;}
+if(selectedRules.length===0){document.getElementById('status').textContent='Selectează cel puțin o regulă';return;}
 btn.disabled=true;btn.textContent='Se trimite...';
-document.getElementById('status').textContent='Se salveaza...';
+document.getElementById('status').textContent='Se salvează...';
 try{
 var controller=new AbortController();
 var timeout=setTimeout(function(){controller.abort()},15000);
@@ -355,15 +355,15 @@ document.getElementById('formWrap').classList.add('hidden');
 document.getElementById('successMsg').classList.add('show');
 document.getElementById('status').textContent='Salvat!';
 }catch(err){
-document.getElementById('status').textContent=err.name==='AbortError'?'Timeout — incearca din nou':'Eroare de retea — incearca din nou';
-btn.disabled=false;btn.textContent='Trimite selectia';
+document.getElementById('status').textContent=err.name==='AbortError'?'Timeout — încearcă din nou':'Eroare de rețea — încearcă din nou';
+btn.disabled=false;btn.textContent='Trimite selecția';
 }}
 
 function resetForm(){
 document.getElementById('formWrap').classList.remove('hidden');
 document.getElementById('successMsg').classList.remove('show');
 document.getElementById('submitBtn').disabled=false;
-document.getElementById('submitBtn').textContent='Trimite selectia';
+document.getElementById('submitBtn').textContent='Trimite selecția';
 document.getElementById('status').textContent='';
 document.getElementById('customRules').innerHTML='';customRules=[];
 SECTIONS.forEach(function(sec){sec.rules.forEach(function(r){
