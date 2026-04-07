@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Regulament Apartament</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#0e0e0e;--card:#1a1a1a;--card2:#222;--border:#2a2a2a;
+--gold:#c9a96e;--gold2:#e8d5a8;--gold-dim:#8a7a50;
+--text:#f0ede6;--text2:#a09a8e;--text3:#5a5650;
+--green:#3a9e5c;--red:#d44040;--blue:#5a8fd4;--amber:#d4922a;--purple:#8a7abf;--pink:#c45a7a;
+--radius:12px;--checked-bg:rgba(58,158,92,0.06);--bar-bg:rgba(14,14,14,0.92);
+}
+html.light{
+--bg:#f5f3ee;--card:#ffffff;--card2:#faf8f4;--border:#e0dbd2;
+--gold:#a6854a;--gold2:#7a6235;--gold-dim:#c9a96e;
+--text:#1c1c1a;--text2:#5a5650;--text3:#a09a8e;
+--checked-bg:rgba(58,158,92,0.08);--bar-bg:rgba(245,243,238,0.92);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:0 0 3rem}
+.hero{text-align:center;padding:2.5rem 1rem 1.5rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.hero h1{font-family:'DM Serif Display',serif;font-size:28px;color:var(--gold2);margin-bottom:6px}
+.hero p{font-size:13px;color:var(--text2);max-width:380px;margin:0 auto}
+.theme-toggle{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;border:1px solid var(--border);background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;font-size:16px}
+.theme-toggle:hover{border-color:var(--gold)}
+.container{max-width:600px;margin:0 auto;padding:0 1rem}
+.section{margin-bottom:12px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--card)}
+.sec-head{padding:12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s}
+.sec-head:hover{background:var(--card2)}
+.sec-head .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sec-head .title{font-size:14px;font-weight:600;flex:1}
+.sec-head .badge{font-size:11px;color:var(--text3);background:var(--bg);padding:2px 8px;border-radius:20px}
+.sec-head .arrow{color:var(--text3);font-size:12px;transition:transform .2s}
+.sec-head.open .arrow{transform:rotate(180deg)}
+.sec-body{display:none;border-top:1px solid var(--border)}
+.sec-body.open{display:block}
+.rule{display:flex;align-items:flex-start;gap:12px;padding:11px 16px;border-bottom:1px solid var(--border);transition:background .15s;cursor:pointer}
+.rule:last-child{border-bottom:none}
+.rule:hover{background:var(--card2)}
+.rule.checked{background:var(--checked-bg)}
+.cb{width:20px;height:20px;border-radius:6px;border:2px solid var(--text3);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s;margin-top:1px}
+.rule.checked .cb{background:var(--green);border-color:var(--green)}
+.cb svg{width:12px;height:12px;opacity:0;transition:opacity .1s}
+.rule.checked .cb svg{opacity:1}
+.rule-text{font-size:13px;line-height:1.5;color:var(--text2);flex:1}
+.rule.checked .rule-text{color:var(--text)}
+.rule-edit{outline:none;border-radius:4px;padding:1px 3px;margin:-1px -3px;transition:background .15s}
+.rule-edit:focus{background:var(--card2);box-shadow:0 0 0 1px var(--gold)}
+.field{margin-top:8px}
+.field input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:12px;color:var(--text);font-family:inherit;outline:none;transition:border .15s}
+.field input:focus{border-color:var(--gold)}
+.field input::placeholder{color:var(--text3)}
+.sticky-bar{position:sticky;top:0;z-index:20;background:var(--bar-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 1rem;margin-bottom:1rem}
+.sticky-inner{max-width:600px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
+.sticky-bar .count{font-size:13px;font-weight:500;color:var(--gold)}
+.sticky-bar .status{font-size:11px;color:var(--text3)}
+.btn-submit{display:block;width:100%;padding:14px;background:var(--gold);color:#0e0e0e;border:none;border-radius:var(--radius);font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;margin-top:1.5rem;transition:all .15s}
+.btn-submit:hover{opacity:.85}
+.btn-submit:disabled{opacity:.4;cursor:not-allowed}
+.success{display:none;text-align:center;padding:3rem 1rem}
+.success.show{display:block}
+.success .check-circle{width:64px;height:64px;border-radius:50%;background:rgba(58,158,92,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem}
+.success .check-circle svg{width:32px;height:32px;color:var(--green)}
+.success h2{font-family:'DM Serif Display',serif;font-size:22px;color:var(--gold2);margin-bottom:8px}
+.success p{font-size:13px;color:var(--text2);max-width:300px;margin:0 auto}
+.form-wrap{display:block}
+.form-wrap.hidden{display:none}
+.btn-another{margin-top:1.5rem;padding:10px 24px;background:transparent;border:1px solid var(--border);border-radius:var(--radius);color:var(--text2);font-family:inherit;font-size:13px;cursor:pointer;transition:all .15s}
+.btn-another:hover{border-color:var(--gold);color:var(--gold)}
+.add-box{border:1px dashed var(--border);border-radius:var(--radius);padding:16px;margin-top:16px;background:var(--card)}
+.add-box h3{font-size:14px;font-weight:600;color:var(--text);margin-bottom:10px}
+.add-row{display:flex;gap:8px;margin-bottom:8px}
+.add-row input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--text);font-family:inherit;outline:none;transition:border .15s}
+.add-row input:focus{border-color:var(--gold)}
+.add-row input::placeholder{color:var(--text3)}
+.add-row button{background:var(--gold);color:#0e0e0e;border:none;border-radius:8px;padding:0 16px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:opacity .15s}
+.add-row button:hover{opacity:.85}
+.cr{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--card2);border-radius:8px;margin-bottom:6px;animation:fadeIn .2s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.cr .cr-chk{width:18px;height:18px;border-radius:5px;border:2px solid var(--green);background:var(--green);flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.cr .cr-chk svg{width:10px;height:10px}
+.cr .cr-text{flex:1;font-size:13px;color:var(--text);outline:none;border-radius:4px;padding:1px 3px}
+.cr .cr-text:focus{box-shadow:0 0 0 1px var(--gold);background:var(--card)}
+.cr .cr-del{width:24px;height:24px;border-radius:6px;border:none;background:transparent;color:var(--text3);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.cr .cr-del:hover{background:rgba(212,64,64,0.15);color:var(--red)}
+</style>
+</head>
+<body>
+
+<div class="hero">
+<button class="theme-toggle" onclick="toggleTheme()" id="themeBtn" title="Schimba tema">&#9728;&#65039;</button>
+<h1>Regulament Apartament</h1>
+<p>Selecteaza regulile potrivite, editeaza textul daca vrei, si adauga reguli noi</p>
+</div>
+
+<div class="sticky-bar">
+<div class="sticky-inner">
+<span class="count" id="count">0 reguli selectate</span>
+<span class="status" id="status"></span>
+</div>
+</div>
+
+<div class="container">
+<div class="form-wrap" id="formWrap">
+<div id="sections"></div>
+
+<div class="add-box">
+<h3>+ Adauga o regula noua</h3>
+<div class="add-row">
+<input type="text" id="newRuleInput" placeholder="Scrie regula aici si apasa Enter sau Adauga...">
+<button onclick="addCustomRule()">Adauga</button>
+</div>
+<div id="customRules"></div>
+</div>
+
+<button class="btn-submit" id="submitBtn" onclick="submitForm()">Trimite selectia</button>
+</div>
+
+<div class="success" id="successMsg">
+<div class="check-circle">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+</div>
+<h2>Multumim!</h2>
+<p>Selectia ta a fost salvata. Proprietarul va vedea raspunsul tau.</p>
+<button class="btn-another" onclick="resetForm()">+ Completeaza din nou</button>
+</div>
+</div>
+
+<script>
+var ENDPOINT="https://script.google.com/macros/s/AKfycbxXqDwvTqGc1J-0tVpjkl8r2CdJrtzBqPQgEWhL1dcOxM3yzf_1mehMdjv86ycqBw/exec";
+var SECTIONS=[
+{id:"fumat",title:"Fumatul",color:"#d44040",rules:[
+{id:"r1",text:"Fumatul in interior este strict interzis (inclusiv vape, iqos, tigari electronice)",on:true},
+{id:"r2",text:"Fumatul este permis doar pe balcon",on:true},
+{id:"r3",text:"Mucurile de tigara se arunca in scrumiera, nu pe jos sau peste balcon"}]},
+{id:"liniste",title:"Zgomot si liniste",color:"#8a7abf",rules:[
+{id:"r4",text:"Liniste dupa ora 22:00",on:true},
+{id:"r5",text:"Petrecerile si evenimentele nu sunt permise",on:true},
+{id:"r6",text:"Evitati trantitul usilor, muzica tare, strigatul"},
+{id:"r7",text:"Fiti respectuosi cu vecinii — este o zona rezidentiala"}]},
+{id:"ac",title:"Aer conditionat si energie",color:"#5a8fd4",rules:[
+{id:"r8",text:"Nu lasati aerul conditionat pornit cu geamurile sau usile deschise",on:true},
+{id:"r9",text:"Stingeti luminile, aerul conditionat si TV-ul cand plecati din apartament"}]},
+{id:"animale",title:"Animale",color:"#c45a7a",rules:[
+{id:"r10",text:"Animalele de companie nu sunt permise",on:true}]},
+{id:"vizitatori",title:"Vizitatori si ocupare",color:"#d4922a",rules:[
+{id:"r11",text:"Doar persoanele din rezervare au acces in apartament"},
+{id:"r12",text:"Nu sunt permisi vizitatori neinregistrati peste noapte"},
+{id:"r13",text:"Nr. maxim de persoane",field:"maxpers",placeholder:"ex: 4 persoane"}]},
+{id:"bucatarie",title:"Bucatarie si gratar",color:"#d4922a",rules:[
+{id:"r14",text:"Echipamentele din bucatarie sunt la dispozitia voastra"},
+{id:"r15",text:"Gratar disponibil in exterior — curatati-l dupa utilizare"},
+{id:"r16",text:"Nu lasati aragazul/cuptorul pornit nesupravegheat"}]},
+{id:"baie",title:"Baia si instalatii sanitare",color:"#3a9e5c",rules:[
+{id:"r17",text:"Nu aruncati servetele umede, tampoane sau alte obiecte in toaleta"},
+{id:"r18",text:"Semnalati orice scurgere sau problema la instalatii imediat"}]},
+{id:"spalat",title:"Masina de spalat",color:"#888780",rules:[
+{id:"r19",text:"Masina de spalat este la dispozitie"},
+{id:"r20",text:"Nu supraincarcati masina si nu folositi cantitati excesive de detergent"},
+{id:"r21",text:"Nu spalati haine cu vopsea sau substante care pot strica masina"}]},
+{id:"chei",title:"Chei si acces",color:"#d44040",rules:[
+{id:"r22",text:"Nu faceti copii dupa chei / nu dati codul de acces altor persoane"},
+{id:"r23",text:"La plecare, returnati cheile / asigurati-va ca usa este incuiata"}]},
+{id:"siguranta",title:"Siguranta",color:"#d4922a",rules:[
+{id:"r24",text:"Detectoarele de fum si gaz sunt instalate — nu le dezactivati",on:true},
+{id:"r25",text:"Incuiati usa de la intrare cand plecati si noaptea"},
+{id:"r26",text:"Nu lasati focul deschis nesupravegheat (aragaz, lumanari, gratar)"},
+{id:"r27",text:"In caz de urgenta, sunati la 112"}]},
+{id:"copii",title:"Copii",color:"#8a7abf",rules:[
+{id:"r28",text:"Copiii trebuie supravegheati permanent de un adult"},
+{id:"r29",text:"Proprietarul nu isi asuma responsabilitatea pentru siguranta copiilor"}]},
+{id:"pagube",title:"Pagube",color:"#d44040",rules:[
+{id:"r30",text:"Orice stricaciune se raporteaza imediat proprietarului",on:true},
+{id:"r31",text:"Nu incercati sa reparati singuri — contactati proprietarul"},
+{id:"r32",text:"Costul reparatiilor/inlocuirilor va fi suportat de oaspete"}]},
+{id:"parcare",title:"Parcarea",color:"#5a8fd4",rules:[
+{id:"r33",text:"Loc de parcare inclus"},
+{id:"r34",text:"Doar un vehicul per rezervare"},
+{id:"r35",text:"Nu blocati accesul altor locatari"}]},
+{id:"spatii",title:"Spatii comune",color:"#888780",rules:[
+{id:"r36",text:"Respectati regulile blocului/cladirii"},
+{id:"r37",text:"Nu lasati obiecte personale in spatiile comune (scara, hol)"}]},
+{id:"consumabile",title:"Consumabile",color:"#3a9e5c",rules:[
+{id:"r38",text:"Consumabilele de baza sunt incluse (sapun, hartie igienica, etc.)"},
+{id:"r39",text:"Daca se termina ceva, anuntati proprietarul"}]},
+{id:"wifi",title:"Internet / Wi-Fi",color:"#5a8fd4",rules:[
+{id:"r40",text:"Retea si parola afisate in apartament"},
+{id:"r41",text:"Nu descarcati continut ilegal prin reteaua noastra"}]},
+{id:"zone",title:"Zone restrictionate",color:"#888780",rules:[
+{id:"r42",text:"Anumite spatii de depozitare sunt ale proprietarului — nu le accesati"},
+{id:"r43",text:"Nu deschideti tabloul electric decat in caz de pana de curent"}]},
+{id:"mobilier",title:"Mobilier si decor",color:"#d4922a",rules:[
+{id:"r44",text:"Nu mutati mobila din pozitia initiala"},
+{id:"r45",text:"Nu puneti cuie, scotch sau adezivi pe pereti"}]},
+{id:"checkout",title:"Checkout",color:"#8a7abf",rules:[
+{id:"r46",text:"Inchideti toate geamurile si usile"},
+{id:"r47",text:"Opriti toate luminile si aparatele electrice"},
+{id:"r48",text:"Stingeti aerul conditionat"},
+{id:"r49",text:"Lasati cheile in locul stabilit"}]},
+{id:"contact",title:"Contact si urgente",color:"#3a9e5c",rules:[
+{id:"r50",text:"Proprietarii sunt in apropiere si disponibili pentru orice problema",on:true},
+{id:"r51",text:"Nr. telefon proprietar",field:"phone",placeholder:"07xx xxx xxx"}]},
+{id:"bunsmt",title:"Bun simt general",color:"#888780",rules:[
+{id:"r52",text:"Tratati apartamentul cu grija — spatiu primitor, amenajat cu gust, echipat cu tot ce aveti nevoie"},
+{id:"r53",text:"Orice nelamurire — contactati proprietarul, suntem aproape si va ajutam cu placere"}]}
+];
+
+var state={},fieldValues={},customRules=[],customId=0;
+var checkSvg='<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+
+function init(){
+var container=document.getElementById('sections');
+SECTIONS.forEach(function(sec,si){
+sec.rules.forEach(function(r){state[r.id]=!!r.on;if(r.field)fieldValues[r.field]='';});
+var cc=sec.rules.filter(function(r){return!!r.on}).length;
+var div=document.createElement('div');div.className='section';
+div.innerHTML=
+'<div class="sec-head'+(si<3?' open':'')+'" onclick="toggleSection(this)" data-sec="'+sec.id+'">'+
+'<span class="dot" style="background:'+sec.color+'"></span>'+
+'<span class="title">'+sec.title+'</span>'+
+'<span class="badge" id="badge-'+sec.id+'">'+cc+'/'+sec.rules.length+'</span>'+
+'<span class="arrow">&#9660;</span></div>'+
+'<div class="sec-body'+(si<3?' open':'')+'" id="body-'+sec.id+'">'+
+sec.rules.map(function(r){
+return'<div class="rule'+(r.on?' checked':'')+'" id="rule-'+r.id+'" onclick="toggleRule(\''+r.id+'\',\''+sec.id+'\',event)">'+
+'<div class="cb">'+checkSvg+'</div>'+
+'<div class="rule-text">'+
+'<span class="rule-edit" contenteditable="true" id="text-'+r.id+'" onclick="event.stopPropagation()">'+r.text+'</span>'+
+(r.field?'<div class="field"><input type="text" id="field-'+r.field+'" placeholder="'+r.placeholder+'" onclick="event.stopPropagation()" oninput="fieldValues[\''+r.field+'\']=this.value"></div>':'')+
+'</div></div>';
+}).join('')+'</div>';
+container.appendChild(div);
+});
+updateCount();
+}
+
+function toggleSection(el){el.classList.toggle('open');document.getElementById('body-'+el.dataset.sec).classList.toggle('open')}
+
+function toggleRule(id,secId,e){
+if(e.target.tagName==='INPUT'||e.target.getAttribute('contenteditable'))return;
+state[id]=!state[id];
+document.getElementById('rule-'+id).classList.toggle('checked',state[id]);
+updateBadge(secId);updateCount();
+}
+
+function updateBadge(secId){
+var sec=SECTIONS.find(function(s){return s.id===secId});
+var c=sec.rules.filter(function(r){return state[r.id]}).length;
+document.getElementById('badge-'+secId).textContent=c+'/'+sec.rules.length;
+}
+
+function updateCount(){
+var n=Object.values(state).filter(Boolean).length+customRules.length;
+document.getElementById('count').textContent=n+' regul'+(n===1?'a selectata':'i selectate');
+}
+
+function addCustomRule(){
+var input=document.getElementById('newRuleInput');
+var text=input.value.trim();if(!text)return;
+var id='c'+(++customId);customRules.push(id);
+var div=document.createElement('div');div.className='cr';div.id='crule-'+id;
+div.innerHTML=
+'<div class="cr-chk">'+checkSvg+'</div>'+
+'<span class="cr-text" contenteditable="true" id="ctext-'+id+'">'+text+'</span>'+
+'<button class="cr-del" onclick="removeCustomRule(\''+id+'\')" title="Sterge">&times;</button>';
+document.getElementById('customRules').appendChild(div);
+input.value='';input.focus();updateCount();
+}
+
+function removeCustomRule(id){
+customRules=customRules.filter(function(c){return c!==id});
+var el=document.getElementById('crule-'+id);if(el)el.remove();updateCount();
+}
+
+document.getElementById('newRuleInput').addEventListener('keydown',function(e){
+if(e.key==='Enter'){e.preventDefault();addCustomRule();}
+});
+
+async function submitForm(){
+var btn=document.getElementById('submitBtn');
+var selectedRules=[];
+SECTIONS.forEach(function(sec){sec.rules.forEach(function(r){
+if(state[r.id]){
+var txt=document.getElementById('text-'+r.id).textContent.trim();
+if(r.field&&fieldValues[r.field])txt+=': '+fieldValues[r.field];
+selectedRules.push(txt);
+}});});
+customRules.forEach(function(id){
+var el=document.getElementById('ctext-'+id);
+if(el)selectedRules.push('[NOU] '+el.textContent.trim());
+});
+if(selectedRules.length===0){document.getElementById('status').textContent='Selecteaza cel putin o regula';return;}
+btn.disabled=true;btn.textContent='Se trimite...';
+document.getElementById('status').textContent='Se salveaza...';
+try{
+await fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:'',rules:selectedRules.join('\n'),phone:fieldValues.phone||'',maxpers:fieldValues.maxpers||''})});
+document.getElementById('formWrap').classList.add('hidden');
+document.getElementById('successMsg').classList.add('show');
+document.getElementById('status').textContent='Salvat!';
+}catch(err){
+document.getElementById('status').textContent='Eroare — incearca din nou';
+btn.disabled=false;btn.textContent='Trimite selectia';
+}}
+
+function resetForm(){
+document.getElementById('formWrap').classList.remove('hidden');
+document.getElementById('successMsg').classList.remove('show');
+document.getElementById('submitBtn').disabled=false;
+document.getElementById('submitBtn').textContent='Trimite selectia';
+document.getElementById('status').textContent='';
+document.getElementById('customRules').innerHTML='';customRules=[];
+SECTIONS.forEach(function(sec){sec.rules.forEach(function(r){
+state[r.id]=!!r.on;
+document.getElementById('rule-'+r.id).classList.toggle('checked',state[r.id]);
+if(r.field){fieldValues[r.field]='';document.getElementById('field-'+r.field).value='';}
+});updateBadge(sec.id);});updateCount();
+}
+
+function toggleTheme(){
+document.documentElement.classList.toggle('light');
+var isLight=document.documentElement.classList.contains('light');
+document.getElementById('themeBtn').innerHTML=isLight?'&#127769;':'&#9728;&#65039;';
+try{localStorage.setItem('theme',isLight?'light':'dark')}catch(e){}
+}
+try{if(localStorage.getItem('theme')==='light'){document.documentElement.classList.add('light');document.getElementById('themeBtn').innerHTML='&#127769;';}}catch(e){}
+
+init();
+</script>
+</body>
+</html>
